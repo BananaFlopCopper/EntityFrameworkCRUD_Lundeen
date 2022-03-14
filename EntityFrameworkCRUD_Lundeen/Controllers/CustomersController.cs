@@ -93,10 +93,8 @@ namespace EntityFrameworkCRUD_Lundeen.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.SaveCustomer(customer); // This is the only new line in this function
-                
-                //_context.Add(customer);
-                //await _context.SaveChangesAsync();
+                _context.Add(customer);
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(customer);
