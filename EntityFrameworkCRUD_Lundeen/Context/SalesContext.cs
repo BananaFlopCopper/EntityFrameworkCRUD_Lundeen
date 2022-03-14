@@ -58,7 +58,7 @@ namespace EntityFrameworkCRUD_Lundeen.Context
             {
                 entity.ToTable("Customer");
 
-                //entity.Property(e => e.Id).ValueGeneratedNever();
+                entity.HasKey(e => e.Id);
 
                 entity.Property(e => e.City).HasMaxLength(40);
 
