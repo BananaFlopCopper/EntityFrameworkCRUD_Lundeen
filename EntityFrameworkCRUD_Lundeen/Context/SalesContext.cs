@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using EntityFrameworkCRUD_Lundeen.Models;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.Data.SqlClient;
 
 namespace EntityFrameworkCRUD_Lundeen.Context
 {
@@ -21,6 +23,26 @@ namespace EntityFrameworkCRUD_Lundeen.Context
 
         public virtual DbSet<Customer> Customers { get; set; } = null!;
 
+        public void SaveCustomer(Customer Customer) // This function is so that sql does not reassign 0 to every new customer
+        {
+            string conn = Config.GetConnectionString("Conn");
+            using (SqlConnection connection = new SqlConnection(conn))
+            {
+                SqlCommand cmd = new SqlCommand("AddCustomer", connection);
+
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+                cmd.Parameters.AddWithValue("@FirstName",   Customer.FirstName);
+                cmd.Parameters.AddWithValue("@LastName",    Customer.LastName);
+                cmd.Parameters.AddWithValue("@City",        Customer.City);
+                cmd.Parameters.AddWithValue("@Country",     Customer.Country);
+                cmd.Parameters.AddWithValue("@Phone",       Customer.Phone);
+
+                connection.Open();
+                cmd.ExecuteNonQuery();
+            }
+        }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
@@ -36,7 +58,7 @@ namespace EntityFrameworkCRUD_Lundeen.Context
             {
                 entity.ToTable("Customer");
 
-                entity.Property(e => e.Id).ValueGeneratedNever();
+                //entity.Property(e => e.Id).ValueGeneratedNever();
 
                 entity.Property(e => e.City).HasMaxLength(40);
 

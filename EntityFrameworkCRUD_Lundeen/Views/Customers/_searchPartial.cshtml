@@ -1,0 +1,12 @@
+﻿@using(@Html.BeginForm("Index", "Customers", FormMethod.Post))
+{
+    <input type="text" name="SearchPhrase" id="SearchPhrase" />
+    <select name ="type" id="type">
+        <option value="city">City</option>
+        <option value="lastinitial">LastNameInitial</option>
+        <option value="lastname">LastName</option>
+    </select>
+
+    <input type="submit" name="Submit" id="Submit" />
+    
+}
